@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class ListerCollaborateursController extends HttpServlet {
 
+	// SERVLETS DE GESTION REQUETES GET/PARAMETRE
+
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	resp.getWriter().write("Hello Guys ! Time for programming ! ^^, ");
