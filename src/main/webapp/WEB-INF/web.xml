@@ -2,7 +2,7 @@
 
 <web-app>
 	<display-name>sgp</display-name>
-
+ 
 <servlet>
 	<servlet-name>ListerCollaborateursController</servlet-name>
 	<servlet-class>dev.sgp.web.ListerCollaborateursController</servlet-class>
@@ -10,6 +10,10 @@
 <servlet>
 	<servlet-name>EditerCollaborateursController</servlet-name>
 	<servlet-class>dev.sgp.web.EditerCollaborateursController</servlet-class>
+</servlet>
+<servlet>
+	<servlet-name>CreerCollaborateursController</servlet-name>
+	<servlet-class>dev.sgp.web.CreerCollaborateursController</servlet-class>
 </servlet>
 <servlet-mapping>
 	<servlet-name>ListerCollaborateursController</servlet-name>
@@ -19,5 +23,9 @@
 <servlet-mapping>
 	<servlet-name>EditerCollaborateursController</servlet-name>
 	<url-pattern>/collaborateurs/editer</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+	<servlet-name>CreerCollaborateursController</servlet-name>
+	<url-pattern>/collaborateurs/creer</url-pattern>
 </servlet-mapping>
 </web-app>

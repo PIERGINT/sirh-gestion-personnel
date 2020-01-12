@@ -1,5 +1,9 @@
 package dev.sgp.web;
 
+/**
+ * Cette classe permet de paramétrer une servlet afin de gérer des requêtes de type get
+ */
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
