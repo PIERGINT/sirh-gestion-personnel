@@ -10,22 +10,57 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.UUID;
+import java.util.regex.Pattern;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dev.sgp.entite.Collaborateur;
+import dev.sgp.entite.Departement;
+import dev.sgp.service.CollaborateurService;
+import dev.sgp.service.DepartementService;
+import dev.sgp.util.Constantes;
 
 @SuppressWarnings("serial")
 public class EditerCollaborateursController extends HttpServlet {
 
 	// SERVLETS DE GESTION REQUETES GET/COLLABORATEUR
+	// Récupération du service.
+	private CollaborateurService collabService = Constantes.COLLAB_SERVICE;
+	private DepartementService departService = Constantes.DEPART_SERVICE;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.getRequestDispatcher("/WEB-INF/view/collab/editerCollaborateur.jsp").forward(req, resp);
 
 		// Recherche du matricule
-		String matriculeParam = req.getParameter("matricule");
+		String matricule = req.getParameter("matricule");
 		resp.setContentType("text/html");
+
+		List<Collaborateur> collaborateurs = collabService.listerCollaborateurs();
+		Optional<Collaborateur> collab = collaborateurs.stream().filter(c -> c.getMatricule().equals(matricule))
+				.findFirst();
+		
+		 if (collab.isPresent()) {
+
+	            req.setAttribute("collaborateur", collab.get());
+	        }
 
 		// Code HTML écrit dans le corps de la réponse.
 		// A) Erreur côté client si pas de matricule.
-		if (matriculeParam == null) {
+		if (matricule == null) {
 			// A1) Affichage statut.
 			resp.setStatus(400);
 			// A2) Affichage cause erreur.
@@ -36,52 +71,14 @@ public class EditerCollaborateursController extends HttpServlet {
 			// B1) Affichage statut.
 			resp.setStatus(200);
 			// B2)Affichage numéro matricule.
-			resp.getWriter().write("<h1>Edition de collaborateurs</h1>" + "<ul>" + "<li>code :" + resp.getStatus()
-					+ "</li>" + "<li>Matricule :" + matriculeParam + "</li>" + "</ul>");
+			resp.sendRedirect("/sgp/collaborateurs/editer");
+			;
 
 		}
 
 	}
 	// SERVLETS DE GESTION REQUETES POST/COLLABORATEUR
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Recherche des paramètres
-		String matriculeParam = req.getParameter("matricule");
-		String titreParam = req.getParameter("titre");
-		String nomParam = req.getParameter("nom");
-		String prenomParam = req.getParameter("prenom");
-		resp.setContentType("text/html");
-
-		// C) Erreur côté client si paramètres non renseignés.
-		if (matriculeParam == null || titreParam == null || nomParam == null || prenomParam == null) {
-			// C1) Affichage statut.
-			resp.setStatus(400);
-			// C2) Affichage cause erreur.
-			resp.getWriter().write("Les paramètres suivants sont incorrects : ");
-			if (matriculeParam == null) {
-				resp.getWriter().write("<li>Matricule</li>");
-			}
-			if (titreParam == null) {
-				resp.getWriter().write("<li>Titre</li>");
-			}
-			if (nomParam == null) {
-				resp.getWriter().write("<li>Nom</li>");
-			}
-			if (prenomParam == null) {
-				resp.getWriter().write("<li>Prenom</li>");
-			}
-
-			// D) Code correct si matricule.
-			// D1) Affichage statut.
-		} else {
-			resp.setStatus(201);
-			// D2) Affichage profil collaborateur.
-			resp.getWriter()
-					.write("<h1>Création d'un collaborateur avec les informations suivantes</h1>" + "<ul>"
-							+ "<li>Matricule :" + matriculeParam + "</li>" + "<li>Titre :" + titreParam + "</li>"
-							+ "<li>Nom :" + nomParam + "</li>" + "<li>Prenom :" + prenomParam + "</li>" + "</ul>");
-
-		}
-	}
+	
+	
 }
